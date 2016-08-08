@@ -1,2 +1,2 @@
-useDynLib(ACMEeqtl)
+useDynLib(ACMEeqtl, .registration = TRUE)
 exportPattern("^[[:alpha:]]+")
