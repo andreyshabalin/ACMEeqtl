@@ -1,0 +1,11 @@
+citHeader("To cite the 'ACMEeqtl' package in publications use:")
+
+citEntry(entry="article",
+         title = "Estimation of Interpretable eQTL Effect Sizes Using a Log of Linear Model",
+         author = personList(as.person("J. Palowitch"),as.person("A.A. Shabalin"),as.person("Y. Zhou"),as.person("A.B. Nobel"),as.person("F.A. Wright")),
+         year     = "2016",
+         url      = "http://arxiv.org/abs/1605.08799",
+         publisher= "arxig.org",
+         journal  = "arxig.org",
+         textVersion = "John Palowitch, Andrey Shabalin, Yihui Zhou, Andrew B. Nobel, Fred A. Wright. Estimation of Interpretable eQTL Effect Sizes Using a Log of Linear Model, http://arxiv.org/abs/1605.08799"
+)
