@@ -35,7 +35,7 @@ effectSizeEstimationR(x, y, cvrt)
 	\item{SST}{Sum of squared residuals of the model with zero effect.}
 	\item{F}{The F test for the significance of the genotype effect.}
 	\item{eta}{The effect size parameter for simplified model (beta1/beta0).}
-	\item{SE_eta}{Standard error of the eta estimate}
+	\item{SE_eta}{Standard error of the eta estimate.}
 }
 \author{
 	Andrey A Shabalin \email{ashabalin@vcu.edu}
@@ -78,7 +78,7 @@ z1 = effectSizeEstimationC(x, y, cvrt)
 
 ### Compare the estimates
 
-show(cbind(z1,z2))
+show(cbind(z1, z2))
 
-all.equal(z1,z2)
+stopifnot(all.equal(z1, z2))
 }
