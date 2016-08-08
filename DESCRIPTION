@@ -1,8 +1,8 @@
 Package: ACMEeqtl
 Type: Package
 Title: Estimation of Interpretable eQTL Effect Sizes Using a Log of Linear Model
-Version: 1.1
-Date: 2016-08-07
+Version: 1.0
+Date: 2016-08-08
 Author: Andrey A Shabalin
 Maintainer: Andrey A Shabalin <ashabalin@vcu.edu>
 Description: We use a non-linear model, termed ACME, 
@@ -12,7 +12,9 @@ Description: We use a non-linear model, termed ACME,
     estimate maximum likelihood paramters. The ACME model
     provides interpretable effect size estimates and
     p-values with well controlled Type-I error.
+    Includes both R and (much faster) C implementations.
 BugReports: https://github.com/andreyshabalin/ACMEeqtl/issues
+Requires: filematrix
 URL: https://github.com/andreyshabalin/ACMEeqtl
 License: LGPL-3
 VignetteBuilder: knitr
