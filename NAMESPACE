@@ -1,2 +1,5 @@
 useDynLib(ACMEeqtl, .registration = TRUE)
-exportPattern("^[[:alpha:]]+")
+export(
+    "effectSizeEstimationC",
+    "effectSizeEstimationR"
+)
