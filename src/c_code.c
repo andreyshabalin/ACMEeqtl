@@ -2,8 +2,9 @@
 #include <Rinternals.h>
 #include <math.h>
 #include <stdbool.h>
+#include <R_ext/Rdynload.h>
 
-# Add use of R_CheckUserInterrupt
+// Add use of R_CheckUserInterrupt
 
 const int outrows = 8;
 const bool isdebug = false;
@@ -37,6 +38,47 @@ SEXP vecmatProductC(SEXP x, SEXP cvrtqr){
 	UNPROTECT(3);
 	return(rez);
 }
+
+
+// Orthogonolize 'xx' with respect to 'cc'
+// xx - n-vector
+// cc - n*ncvrt vector
+// temp - ncvrt vector for temporary data
+// xxout - output 
+void orthogonolizeVector(double *xx, double *cc, double *temp, double *xxout, int n, int ncvrt) {
+	// temp = xx %*% cc
+	for( int j=0; j<ncvrt; j++) {
+		double val = 0;
+		for( int i=0; i<n; i++)
+			val += xx[i] * cc[i + j*n];
+		temp[j] = val;
+	}
+	// xxout = temp - cc %*% temp
+	for( int i=0; i<n; i++) {					
+		double value = xx[i];
+		for( int j=0; j<ncvrt; j++)
+			value -= temp[j] * cc[i + j*n];
+		xxout[i] = value;
+	}
+}
+
+// Orthogonalize vector 'x' with respect to orthonormalized vectors in 'cvrtqr'
+SEXP orthogonolizeVectorC(SEXP x, SEXP cvrtqr){
+	x = PROTECT(coerceVector(x, REALSXP));
+	cvrtqr = PROTECT(coerceVector(cvrtqr, REALSXP));
+	
+	int n = length(x);
+	int ncvrt = length(cvrtqr) / length(x);
+	
+	SEXP tmp = PROTECT(allocVector(REALSXP, ncvrt)); 
+	SEXP rez = PROTECT(allocVector(REALSXP, n)); 
+	
+	orthogonolizeVector(REAL(x), REAL(cvrtqr), REAL(tmp), REAL(rez), n, ncvrt); 
+
+	UNPROTECT(4);
+	return(rez);
+}
+
 // C analog of sum(x)
 inline double sum(double *x, int n) {
 	double sum = 0;
@@ -60,6 +102,8 @@ inline double sumxy(double *x, double *y, int n) {
 		sum += x[i] * y[i];
 	return(sum);
 }
+
+
 
 static R_CallMethodDef callMethods[] = {
 	{"vecmatProductC", (DL_FUNC) &vecmatProductC, 2},
