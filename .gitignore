@@ -2,6 +2,9 @@
 .Rhistory
 .Rapp.history
 
+# more R files
+temp/*
+
 # Session Data files
 .RData
 
