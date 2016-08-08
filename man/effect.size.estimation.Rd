@@ -34,7 +34,8 @@ effectSizeEstimationR(x, y, cvrt)
 	\item{SSE}{Sum of squared residuals of the fitted model.}
 	\item{SST}{Sum of squared residuals of the model with zero effect.}
 	\item{F}{The F test for the significance of the genotype effect.}
-	\item{SE}{Standard error of the estimated effect size}
+	\item{eta}{The effect size parameter for simplified model (beta1/beta0).}
+	\item{SE_eta}{Standard error of the eta estimate}
 }
 \author{
 	Andrey A Shabalin \email{ashabalin@vcu.edu}
