@@ -3,7 +3,7 @@
 # y - phenotype (expression)
 # cvrt - matrix of covariates (a column per covariate)
 
-.outputNames = c("beta0", "beta1", "nits", "SSE", "SST", "F","eta","SE");
+.outputNames = c("beta0", "beta1", "nits", "SSE", "SST", "F","eta","SE_eta");
 
 effectSizeEstimationC = function(x, y, cvrt) {
 	stopifnot( length(x) == length(y) );
@@ -13,14 +13,12 @@ effectSizeEstimationC = function(x, y, cvrt) {
 	
 	if(length(cvrt) > 0) {
 		cvrt_qr <- cbind(1, cvrt);
-		cvrt_qr = t(qr.Q(qr(cvrt_qr)));
+		cvrt_qr = qr.Q(qr(cvrt_qr));
 	} else {
 		cvrt_qr = rep(1/sqrt(length(x)), length(x));
 	}
 	rez = .Call("effectSizeSingleC", x, y, cvrt_qr, PACKAGE = "ACMEeqtl");
-	if(length(rez) == 8) {
-		names(rez) = .outputNames;
-	}
+	names(rez) = .outputNames;
 	return(rez);
 }
 
