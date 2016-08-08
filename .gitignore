@@ -5,6 +5,10 @@
 # more R files
 temp/*
 
+# compiled code
+*.o
+*.dll
+
 # Session Data files
 .RData
 
@@ -34,3 +38,4 @@ vignettes/*.pdf
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
+.Rproj.user
