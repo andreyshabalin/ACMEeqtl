@@ -3,6 +3,8 @@
 # y - phenotype (expression)
 # cvrt - matrix of covariates (a column per covariate)
 
+.outputNames = c("beta0", "beta1", "nits", "SSE", "SST", "F","eta","SE");
+
 effectSizeEstimationC = function(x, y, cvrt) {
 	stopifnot( length(x) == length(y) );
 	stopifnot( (length(cvrt) %% length(x)) == 0 );
@@ -15,9 +17,9 @@ effectSizeEstimationC = function(x, y, cvrt) {
 	} else {
 		cvrt_qr = rep(1/sqrt(length(x)), length(x));
 	}
-	rez = .Call("estimateInC2", x, y, cvrt_qr, PACKAGE = "ACMEeqtl");
+	rez = .Call("effectSizeSingleC", x, y, cvrt_qr, PACKAGE = "ACMEeqtl");
 	if(length(rez) == 8) {
-		names(rez) = c("beta0", "beta1", "nits", "SSE", "SST", "F","eta","SE");
+		names(rez) = .outputNames;
 	}
 	return(rez);
 }
@@ -106,6 +108,8 @@ effectSizeEstimationR = function(x, y, cvrt) {
 	# cat('H = ',H,'\n');
 	# cat('Hyx2 = ',crossprod((x/fit)^2, crossprod(P, ydiff)),'\n');
 	# cat('Hxx = ',crossprod(x/fit, crossprod(P, x/fit)),'\n');
-	return(c(beta0=beta0, beta1=beta1, nits=nits, SSE=SSR_cur, SST = SST, F = F, eta = beta_cur, SE_eta = SE_H))
+	rez = c(beta0=beta0, beta1=beta1, nits=nits, SSE=SSR_cur, SST = SST, F = F, eta = beta_cur, SE_eta = SE_H);
+	stopifnot( names(rez) == .outputNames );
+	return(rez)
 }
 
