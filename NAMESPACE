@@ -3,3 +3,7 @@ export(
     "effectSizeEstimationC",
     "effectSizeEstimationR"
 )
+importFrom("filematrix", "fm.create", "fm.load", "fm.open",
+            "fm.create.from.matrix", "closeAndDeleteFiles")
+importClassesFrom("filematrix", "filematrix")
+importMethodsFrom("filematrix", "close")
