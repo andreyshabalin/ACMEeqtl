@@ -6,7 +6,9 @@
 
 // Add use of R_CheckUserInterrupt
 
+// Length of output vector
 const int outrows = 8;
+// Show debug messages
 const bool isdebug = false;
 
 // Product of vector 'xx' and matrix 'cc'
@@ -42,8 +44,8 @@ SEXP vecmatProductC(SEXP x, SEXP cvrtqr){
 
 // Orthogonolize 'xx' with respect to 'cc'
 // xx - n-vector
-// cc - n*ncvrt vector
-// temp - ncvrt vector for temporary data
+// cc - n*ncvrt matrix
+// temp - ncvrt vector for temporary data (inner product)
 // xxout - output 
 void orthogonolizeVector(double *xx, double *cc, double *temp, double *xxout, int n, int ncvrt) {
 	// temp = xx %*% cc
