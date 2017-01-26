@@ -1,9 +1,14 @@
 useDynLib(ACMEeqtl, .registration = TRUE)
 export(
     "effectSizeEstimationC",
-    "effectSizeEstimationR"
+    "effectSizeEstimationR",
+    "create_artificial_data",
+    "multithreadACME"
 )
-importFrom("filematrix", "fm.create", "fm.load", "fm.open",
+importFrom( "filematrix", "fm.create", "fm.load", "fm.open",
             "fm.create.from.matrix", "closeAndDeleteFiles")
 importClassesFrom("filematrix", "filematrix")
 importMethodsFrom("filematrix", "close")
+
+importFrom( "parallel", "makeCluster", "clusterEvalQ", "clusterApplyLB",
+				"stopCluster", "detectCores", "clusterExport")

@@ -306,10 +306,75 @@ SEXP effectSizeSingleC(SEXP x, SEXP y, SEXP cvrtqr){
 }
 
 
+SEXP effectSizeManyC(SEXP genemat, SEXP snpsmat, SEXP snpsmat_fr,SEXP snpsmat_to, SEXP cvrt_qr, SEXP outmatrix){
+	
+	genemat = PROTECT(coerceVector(genemat, REALSXP));
+	snpsmat = PROTECT(coerceVector(snpsmat, REALSXP));
+	snpsmat_fr = PROTECT(coerceVector(snpsmat_fr, REALSXP));
+	snpsmat_to = PROTECT(coerceVector(snpsmat_to, REALSXP));
+	cvrt_qr = PROTECT(coerceVector(cvrt_qr, REALSXP));
+	outmatrix = PROTECT(coerceVector(outmatrix, REALSXP));
+	
+	double *s_fr = REAL(snpsmat_fr);
+	double *s_to = REAL(snpsmat_to);
+	double *out = REAL(outmatrix);
+	double *xgene = REAL(genemat);
+	double *xsnps = REAL(snpsmat);
+	double *cc = REAL(cvrt_qr);
+	
+	int n, ng, ncvrt;
+	
+	SEXP genedim = getAttrib(genemat,R_DimSymbol);
+	if(genedim == R_NilValue) {
+		n = length(genemat);
+		ng = 1;
+	} else {
+		genedim = PROTECT(coerceVector(genedim,INTSXP));
+		n  = INTEGER(genedim)[0];
+		ng = INTEGER(genedim)[1];
+		UNPROTECT(1);
+	}
+	
+	//ns = length(snpsmat) / n;
+	ncvrt = length(cvrt_qr) / n;
+	
+	double *fit   = (double*)malloc(n*sizeof(double));
+	double *ydiff = (double*)malloc(n*sizeof(double));
+	double *ycvrt = (double*)malloc(ncvrt*sizeof(double));
+	
+	int counter = 0;
+	
+	for( int i=0; i<ng; i++) {
+		for( int j=s_fr[i]; j<=s_to[i]; j++) {
+			out[(outrows+2)*counter] = i;
+			out[(outrows+2)*counter+1] = j;
+			internalEstimate(xsnps + n*j, xgene + n*i, cc, ncvrt, n, fit, ydiff, ycvrt, out + (outrows+2)*counter + 2);
+			counter++;
+			//Rprintf("i,j  = %d,%d,%d,%d\n", i,j,s_fr[i],s_to[i]);
+		}
+	}
+	
+	free(fit);
+	free(ydiff);
+	free(ycvrt);	
+
+//	Rprintf("n  = %d\n", n);
+//	Rprintf("ng = %d\n", ng);
+//	Rprintf("ns = %d\n", ns);
+//	Rprintf("ncvrt = %d\n", ncvrt);
+//	Rprintf("pairs = %d\n", counter);
+
+	UNPROTECT(6);
+	return genedim;
+}
+
+
+
 static R_CallMethodDef callMethods[] = {
 	{"vecmatProductC", (DL_FUNC) &vecmatProductC, 2},
 	{"orthogonolizeVectorC", (DL_FUNC) &orthogonolizeVectorC, 2},
 	{"effectSizeSingleC", (DL_FUNC) &effectSizeSingleC, 3},
+	{"effectSizeManyC", (DL_FUNC) &effectSizeManyC, 6},
 	{NULL, NULL, 0}
 };
 
