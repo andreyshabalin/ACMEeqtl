@@ -43,10 +43,12 @@ effectSizeEstimationR(x, y, cvrt)
 \references{
 	The manuscript is available at: \url{http://arxiv.org/abs/1605.08799}
 }
-%\note{
-%}
-%\seealso{
-%}
+\details{
+	The function has two implementations, one fully coded in R and a faster version with core coded in C.
+}
+\seealso{
+	For fast testing of all local gene-SNP pairs (local eQTL) see \code{\link{multithreadACME}}.
+}
 \examples{
 # Model parameters
 beta0 = 10000
