@@ -20,7 +20,6 @@ create_artificial_data(
     savetxt = FALSE,
     verbose = TRUE)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{nsample}{
     Number of samples.
@@ -86,5 +85,4 @@ z = create_artificial_data(
     verbose = TRUE)
     
     names(z)
-}
 }
