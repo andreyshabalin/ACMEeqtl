@@ -52,29 +52,35 @@ multithreadACME = function(
 		cvrtfm = 'cvrt',
 		acmefm = 'ACME',
 		cisdist = 1e6,
-		threads = -1){	
+		threads = -1,
+		workdir = NULL,
+		verbose = TRUE){	
 
+	if(!is.null(workdir))
+		olddir = setwd(workdir);
+	
 	if(threads <= 0)
 		threads = detectCores();
 	# dir.create(paste0(dir,'/logs'), showWarnings = FALSE, recursive = TRUE);
 	
 	### Orthonormalize covariates
 	{
-		message('Loading and orthonormalizing covariates');
+		if(verbose)	message('Loading and orthonormalizing covariates');
 		cvrt = fm.load(cvrtfm);
 		cvrt_qr = qr.Q(qr(cbind(1, cvrt)));
 	} # cvrt, cvrt_qr
 
 	### Gene/SNP locations	
 	{
-		message('Loading gene/SNP locations');
+		if(verbose)	message('Loading gene/SNP locations');
 		gene_loc = fm.load(glocfm);
 		snps_loc = fm.load(slocfm);
+		stopifnot( !is.unsorted(snps_loc) );
 	} # gene_loc, snps_loc
 
 	### Get matrix sizes
 	{
-		message('Checking gene/SNP filematrices');
+		if(verbose)	message('Checking gene/SNP filematrices');
 		gfm = fm.open(genefm, readonly = TRUE);
 		sfm = fm.open(snpsfm, readonly = TRUE);
 		
@@ -94,7 +100,7 @@ multithreadACME = function(
 		# total_pairs = sum(ind2-ind1+1);
 		cum_pairs = c(0,cumsum(ind2-ind1+1));
 		total_pairs = tail(cum_pairs, 1);
-		message('Total ', total_pairs, ' local gene-SNP pairs')
+		if(verbose)	message('Total ', total_pairs, ' local gene-SNP pairs')
 	} # ind1, ind2, total_pairs, cum_pairs
 	
 	# genes_without_snps = ind2<ind1;
@@ -133,27 +139,27 @@ multithreadACME = function(
 	# sum(gb_npairs>0)
 	gb_offsets = cum_pairs[gene_block_starts]
 	
-	message('Task split into ',length(gene_block_starts),' parts')
 	
 	# ord = sort.list(gb_npairs, decreasing = TRUE);
 	# ord = ord[gb_npairs[ord]>0];
 
-	# ord = which(gb_npairs>0);
+	ord = which(gb_npairs>0);
 	# ord = ord[ order(pmin(gb_npairs[ord],maxpairs*0.8), decreasing = TRUE) ];
+	if(verbose)	message('Task split into ',length(ord),' parts')
 
 	# Create output matrix
 	{
-		message('Creating output filematrix')
+		if(verbose)	message('Creating output filematrix')
 		fm = fm.create(acmefm, nrow = 10, ncol = total_pairs);
 		rownames(fm) = c("geneid","snp_id","beta0", "beta1", "nits", "SSE", "SST", "F","eta","SE")
 		close(fm)
 	}
 	
-	paramlist = vector('list', length(gb_npairs));
-	for( i in seq_along(gb_npairs)) { # i=1
-		# i = ord[j];
+	paramlist = vector('list', length(ord));
+	for( j in seq_along(ord)) { # i=1
+		i = ord[j];
 		geneset = gene_block_starts[i]:(gene_block_starts[i+1]-1L);
-		paramlist[[i]] = list(
+		paramlist[[j]] = list(
 			geneset = geneset,
 			snps_l = ind1[geneset],
 			snps_r = ind2[geneset],
@@ -164,10 +170,10 @@ multithreadACME = function(
 	# param = paramlist[[1]]
 	# param = tail(paramlist,1)[[1]]
 	
-	threads = min(threads, length(gb_npairs));
+	threads = min(threads, length(ord));
 	
 	if( threads > 1 ) {
-		message('Starting ACME eQTL analysis in ', threads, ' parallel jobs');
+		if(verbose)	message('Starting ACME eQTL analysis in ', threads, ' parallel jobs');
 		tic = proc.time();
 		cl = makeCluster(threads);
 		# clusterExport(cl, varlist = c("genefm", "snpsfm", "cvrt_qr","acmefm"));
@@ -179,14 +185,17 @@ multithreadACME = function(
 								 acmefm = acmefm);
 		stopCluster(cl)
 		toc = proc.time();
-		message('Finished in ', round((toc-tic)[3],3), ' seconds');
+		if(verbose)	message('Finished in ', round((toc-tic)[3],3), ' seconds');
 		# show(toc-tic);
 	} else {
 		for( i in seq_along(paramlist) ) { # i = 1
-			message('Processing part ', i, ' of ', length(paramlist));
+			if(verbose)	message('Processing part ', i, ' of ', length(paramlist));
 			process_gene_block(param = paramlist[[i]], genefm, snpsfm, cvrt_qr, acmefm);
 		}
 	}
+	if(!is.null(workdir))
+		setwd(olddir);
+
 	return(invisible(NULL));
 }
 

@@ -5,9 +5,9 @@ date: "January 28, 2017"
 output:   
   BiocStyle::html_document:
     toc: true # table of content true
-    self_contained: false
+    self_contained: true
 vignette: >
-  %\VignetteIndexEntry{Package Overview}
+  %\VignetteIndexEntry{ACMEeqtl Overview}
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
@@ -125,8 +125,10 @@ z = create_artificial_data(
     returnData = FALSE,
     savefmat = TRUE,
     savetxt = FALSE,
-    verbose = TRUE)
+    verbose = FALSE)
 ```
+
+In this example, we use 2 CPU cores (threads) for testing of all gene-SNP pairs within 100,000 bp.
 
 ```{r eqtlEstim}
 multithreadACME(
@@ -138,12 +140,17 @@ multithreadACME(
     acmefm = "ACME",
     cisdist = 100e+03, 
     threads = 2,
-    workdir = paste0(tempdirectory,"/filematrices"))
+    workdir = paste0(tempdirectory,"/filematrices"),
+    verbose = FALSE)
 ```
 
 Now the filematrix `ACME` holds estimations for all local gene-SNP pairs.
 
 ```{r eqtlLool}
-results = fm.load(paste0(tempdirectory,"/filematrices/ACME"))
-pander(t(results[,1:10]))
+fm = fm.open(paste0(tempdirectory,"/filematrices/ACME"))
+TenResults = fm[,1:10];
+rownames(TenResults) = rownames(fm);
+close(fm);
+
+pander(t(TenResults))
 ```
