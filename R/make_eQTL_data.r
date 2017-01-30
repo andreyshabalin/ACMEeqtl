@@ -152,7 +152,7 @@ create_artificial_data = function(
 		fm = fm.create.from.matrix(file.path(saveDir, "filematrices", 'cvrt'), t(cvrts))
 		close(fm)
 		
-		if(verbose) message('Saving true effect info (txt)');
+		if(verbose) message('Saving true effect info (filematrix)');
 		fm = fm.create.from.matrix(file.path(saveDir, "filematrices", 'etas'), as.matrix(tbleta))
 		close(fm)
 	
