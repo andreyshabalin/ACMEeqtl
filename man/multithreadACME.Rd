@@ -23,7 +23,8 @@ multithreadACME(
     acmefm = "ACME",
     cisdist = 1e+06, 
     threads = -1,
-    workdir = NULL)
+    workdir = NULL,
+    verbose = TRUE)
 }
 \arguments{
   \item{genefm}{
@@ -65,14 +66,14 @@ multithreadACME(
   \item{workdir}{
     Directory where the input filematrices are located.
 }
+  \item{verbose}{
+    Set to \code{TRUE} to indicate progress.
 }
-\details{
-  
 }
 \value{
   The function creates a filematrix named \code{acmefm} with 10 rows
   and a column for each tested gene-SNP pair.
-  The rows contain gene-SNP ids and the estimates by \code{\link{effectSizeEstimation}}:
+  The rows contain gene-SNP ids and the estimates by \code{\link{effectSizeEstimationC}}:
     \item{geneid}{The gene id - the column number for the gene in the \code{genefm} filematrix.}
     \item{snp_id}{The SNP id - the column number for the SNP in the \code{snpsfm} filematrix.}
 	\item{beta0}{The constant parameter in the non-linear model (within the logarithm).}
@@ -129,7 +130,7 @@ multithreadACME(
     workdir = paste0(tempdirectory,"/filematrices"),
     verbose = FALSE)
 
-Now the filematrix `ACME` holds estimations for all local gene-SNP pairs.
+# Now the filematrix `ACME` holds estimations for all local gene-SNP pairs.
 
 fm = fm.open(paste0(tempdirectory,"/filematrices/ACME"))
 TenResults = fm[,1:10];

@@ -1,7 +1,7 @@
 process_gene_block = function(param, genefm, snpsfm, cvrt_qr, acmefm) {
 	
-	library(ACMEeqtl)
-	library(filematrix)
+	# library(ACMEeqtl)
+	# library(filematrix)
 	
 	fm = fm.open(genefm, readonly = TRUE);
 	genemat = fm[, param$geneset];

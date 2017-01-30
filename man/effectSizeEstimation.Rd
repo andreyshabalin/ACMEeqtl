@@ -76,7 +76,7 @@ c_eff = rnorm(p, sd = cvrtsd)
 error = rnorm(n, sd = noisesd)
 
 # Generate SNPs
-x = rbinom(n = nsample, size = 2, prob = 0.2)
+x = rbinom(n, size = 2, prob = 0.2)
 y = log(beta0 + beta * x) + cvrt \%*\% c_eff + error
 
 ### Model estimation
@@ -87,6 +87,4 @@ z2 = effectSizeEstimationC(x, y, cvrt)
 ### Compare the estimates
 
 show(cbind(z1, z2))
-
-stopifnot(all.equal(z1, z2))
 }

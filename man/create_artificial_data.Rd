@@ -49,10 +49,8 @@ create_artificial_data(
     Save generated data in text format. This format is used by Matrix eQTL \code{\link[MatrixEQTL]{MatrixEQTL}}.
 }
   \item{verbose}{
-    Set to \code{TRUE} to show more output reporting progress.
+    Set to \code{TRUE} to indicate progress.
 }
-}
-\details{
 }
 \value{
     The function generates the following text files and/or filematrices:

@@ -12,3 +12,6 @@ importMethodsFrom("filematrix", "close")
 
 importFrom( "parallel", "makeCluster", "clusterEvalQ", "clusterApplyLB",
 				"stopCluster", "detectCores", "clusterExport")
+
+importFrom("stats", "rbinom", "rnorm", "runif")
+importFrom("utils", "tail", "write.table")
