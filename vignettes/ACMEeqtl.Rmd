@@ -1,0 +1,149 @@
+---
+title: "Interpretable eQTL Effect Sizes Using a Log of Linear Model"
+author: "Andrey A. Shabalin"
+date: "January 28, 2017"
+output:   
+  BiocStyle::html_document:
+    toc: true # table of content true
+    self_contained: false
+vignette: >
+  %\VignetteIndexEntry{Package Overview}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, include=FALSE}
+# knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+We present a package for estimation of a new model called ACME
+which respects biological understanding of eQTLs.
+The model involves an additive effect of
+allele count and multiplicative component random noise.\
+The model is named "ACME" (Additive-Contribution, Multiplicative-Error) and is defined as
+
+$$y_i = \log(\beta_0 + \beta_1 s_i) + Z_i^T \gamma + \epsilon_i$$
+
+where 
+
+* $y_i$ -- log-transformed normalized gene read count from sample $i$
+* $s_i$ -- minor allele count for the SNP of sample $i$
+* $Z_i$ -- Zi denote the $p \times 1$ vector of covarites for the sample $i$
+* $\beta_0$ -- unknown "baseline" mean of raw expression
+* $\beta_0$ -- unknown linear contribution of $s_i$ on the **raw** expression
+* $\gamma$ -- unknown $p \times 1$ covariate coefficien
+* $\epsilon_i$ -- noise
+
+We estimate the model using fast iterative algorithm.\
+The algorithm estimates the model which is nonlinear only with respect to $\eta = \beta_1 / \beta_0$
+$$y_i = \log(1 + s_i \eta) + \log(\beta_0) + Z_i^T \gamma + \epsilon_i$$
+
+# Getting Started
+
+# Installation
+
+ACMEeqtl can be installed with the following command.
+
+```{r install, eval=FALSE}
+install.packages('ACMEeqtl')
+```
+
+# Using the Package
+
+ACMEeqtl package provides functions for analysis of a single gene-SNP pair as well as fast parallel testing of all local gene-SNP pairs.
+
+```{r loadHidden, echo=FALSE, warning=FALSE, message=FALSE}
+library(pander)
+panderOptions("digits", 3)
+library(ACMEeqtl)
+```
+
+```{r load}
+library(ACMEeqtl)
+```
+
+
+## Testing a Single Gene-SNP Pair
+
+First we generate sample gene, SNP, and set of covariates.
+
+```{r singleInit}
+# Model parameters
+beta0 = 10000
+beta1 = 50000
+
+# Data dimensions
+nsample = 1000
+ncvrt = 19
+
+### Data generation
+### Zero average covariates
+cvrt = matrix(rnorm(nsample * ncvrt), nsample, ncvrt)
+cvrt = t(t(cvrt) - colMeans(cvrt))
+
+# Generate SNPs
+s = rbinom(n = nsample, size = 2, prob = 0.2)
+
+# Generate log-normalized expression
+y = log(beta0 + beta1 * s) + 
+	cvrt %*% rnorm(ncvrt) + 
+	rnorm(nsample)
+```
+
+We provide two equivalent functions for model estimation.
+
+* `effectSizeEstimationR` -- fully coded in R
+* `effectSizeEstimationC` -- faster version with core coded in C.
+
+```{r singleEstim}
+z1 = effectSizeEstimationR(s, y, cvrt)
+z2 = effectSizeEstimationC(s, y, cvrt)
+
+pander(rbind(z1,z2))
+```
+
+Variables `z1`, `z2` show that the estimation was done in `r z1[3]` iterations, with estimated parameters
+
+* $\hat\beta_0$ = `r as.character(round(z1[1],1))` (true parameter is `r as.character(beta0)`)
+* $\hat\beta_1$ = `r as.character(round(z1[2],1))` (true parameter is `r as.character(beta1)`)
+ 
+## Testing All Local Gene-SNP Pairs
+
+First we generate a eQTL dataset in filematrix format 
+(see [filematrix](https://cran.r-project.org/web/packages/filematrix/index.html) package).
+
+```{r eqtlInit}
+tempdirectory = tempdir();
+z = create_artificial_data(
+    nsample = 100,
+    ngene = 500,
+    nsnp = 5000,
+    ncvrt = 1,
+    minMAF = 0.2,
+    saveDir = tempdirectory,
+    returnData = FALSE,
+    savefmat = TRUE,
+    savetxt = FALSE,
+    verbose = TRUE)
+```
+
+```{r eqtlEstim}
+multithreadACME(
+    genefm = "gene",
+    snpsfm = "snps",
+    glocfm = "gene_loc",
+    slocfm = "snps_loc",
+    cvrtfm = "cvrt",
+    acmefm = "ACME",
+    cisdist = 100e+03, 
+    threads = 2,
+    workdir = paste0(tempdirectory,"/filematrices"))
+```
+
+Now the filematrix `ACME` holds estimations for all local gene-SNP pairs.
+
+```{r eqtlLool}
+results = fm.load(paste0(tempdirectory,"/filematrices/ACME"))
+pander(t(results[,1:10]))
+```
