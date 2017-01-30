@@ -62,7 +62,7 @@ multithreadACME = function(
 	{
 		message('Loading and orthonormalizing covariates');
 		cvrt = fm.load(cvrtfm);
-		cvrt_qr = t(qr.Q(qr(cbind(1, cvrt))))
+		cvrt_qr = qr.Q(qr(cbind(1, cvrt)));
 	} # cvrt, cvrt_qr
 
 	### Gene/SNP locations	
