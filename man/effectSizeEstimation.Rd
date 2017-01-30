@@ -70,13 +70,14 @@ cvrt = t(t(cvrt) - colMeans(cvrt))
 c_eff = rnorm(p, sd = cvrtsd)
 error = rnorm(n, sd = noisesd)
 
-x = sample(0:2, n, replace = TRUE, prob = c(0.64, 0.32, 0.04))
+# Generate SNPs
+x = rbinom(n = nsample, size = 2, prob = 0.2)
 y = log(beta0 + beta * x) + cvrt \%*\% c_eff + error
 
 ### Model estimation
 
-z2 = effectSizeEstimationR(x, y, cvrt)
-z1 = effectSizeEstimationC(x, y, cvrt)
+z1 = effectSizeEstimationR(x, y, cvrt)
+z2 = effectSizeEstimationC(x, y, cvrt)
 
 ### Compare the estimates
 
