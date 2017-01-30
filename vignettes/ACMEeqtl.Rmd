@@ -31,8 +31,8 @@ where
 * $s_i$ -- minor allele count for the SNP of sample $i$
 * $Z_i$ -- Zi denote the $p \times 1$ vector of covarites for the sample $i$
 * $\beta_0$ -- unknown "baseline" mean of raw expression
-* $\beta_0$ -- unknown linear contribution of $s_i$ on the **raw** expression
-* $\gamma$ -- unknown $p \times 1$ covariate coefficien
+* $\beta_1$ -- unknown linear contribution of $s_i$ on the **raw** expression
+* $\gamma$ -- unknown $p \times 1$ covariate coefficient
 * $\epsilon_i$ -- noise
 
 We estimate the model using fast iterative algorithm.\
