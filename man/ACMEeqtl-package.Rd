@@ -27,7 +27,11 @@ Includes both R and (faster) C implementations.
 \references{
 	The manuscript is available at: \url{http://arxiv.org/abs/1605.08799}
 }
-
 \seealso{
-	See \code{\link{effectSizeEstimationC}} for reference.
+    For package overview and code examples see the package vignette via:\cr
+    \code{browseVignettes("ACMEeqtl")}\cr
+    or\cr
+	\code{RShowDoc("doc/ACMEeqtl.html", "html", "ACMEeqtl")}
+	
+	For fast testing of all local gene-SNP pairs (local eQTL) see \code{\link{multithreadACME}}.
 }

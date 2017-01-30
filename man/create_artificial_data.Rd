@@ -70,6 +70,11 @@ create_artificial_data(
 	Andrey A Shabalin \email{ashabalin@vcu.edu}
 }
 \seealso{
+    For package overview and code examples see the package vignette via:\cr
+    \code{browseVignettes("ACMEeqtl")}\cr
+    or\cr
+	\code{RShowDoc("doc/ACMEeqtl.html", "html", "ACMEeqtl")}
+	
 	For fast testing of all local gene-SNP pairs (local eQTL) see \code{\link{multithreadACME}}.
 }
 \examples{

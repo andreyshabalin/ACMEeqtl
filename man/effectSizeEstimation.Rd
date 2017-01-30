@@ -47,6 +47,11 @@ effectSizeEstimationR(x, y, cvrt)
 	The function has two implementations, one fully coded in R and a faster version with core coded in C.
 }
 \seealso{
+    For package overview and code examples see the package vignette via:\cr
+    \code{browseVignettes("ACMEeqtl")}\cr
+    or\cr
+	\code{RShowDoc("doc/ACMEeqtl.html", "html", "ACMEeqtl")}
+	
 	For fast testing of all local gene-SNP pairs (local eQTL) see \code{\link{multithreadACME}}.
 }
 \examples{
