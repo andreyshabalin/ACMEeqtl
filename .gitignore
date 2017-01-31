@@ -42,3 +42,6 @@ vignettes/*.pdf
 
 src-i386
 src-x64
+
+# compiled vignettes
+inst/doc
