@@ -1,6 +1,6 @@
 ---
 title: "Interpretable eQTL Effect Sizes Using a Log of Linear Model"
-author: "Andrey A. Shabalin"
+author: "Andrey A. Shabalin, John Palowitch"
 date: "January 28, 2017"
 output:   
   BiocStyle::html_document:
