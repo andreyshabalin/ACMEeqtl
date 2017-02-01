@@ -65,7 +65,6 @@ estimate_multiSNP <- function (SNPs, expr, cvrt, method = "BFGS") {
   
 }
 
-
 #-------------------------------------------------------------------------------
 # Sample data and usage
 
@@ -129,8 +128,8 @@ msACME = function (
 		stopifnot( nrow(gfm) == nrow(cvrt) );
 		stopifnot( nrow(sfm) == nrow(cvrt) );
 		
-		n = ncol(cvrt);
-		p = nrow(cvrt);
+		n = nrow(cvrt);
+		p = ncol(cvrt);
 		
 		# Keeping gfm/sfm open for analysis loop
 		# close(gfm);
@@ -151,13 +150,13 @@ msACME = function (
 	cur_start = 1;
 	count = 1;
 	
-	while (count <= genecap && cur_start <= nrow(gfm)) {
+	while (count <= genecap && cur_start <= ncol(gfm)) {
 		
 		cur_gene = as.numeric(afm[1, cur_start]);
 		expr = gfm[ , cur_gene];
 		
 		# Scanning afm for cur_gene
-		if (verbose) message(paste0('Scanning for gene', cur_gene));
+		if (verbose) message(paste0('Scanning for gene', count));
 		cur_end = cur_start + 10 - 1;
 		scan_count = 1;
 		while(sum(as.vector(afm[1, cur_start:cur_end]) == cur_gene) == 
@@ -167,11 +166,11 @@ msACME = function (
 		}
 		
 		# Getting cur_gene locations and associated snps
-		glocs = which(afm[1, cur_start:cur_end] == cur_gene);
+		glocs = c(cur_start:cur_end)[afm[1, cur_start:cur_end] == cur_gene];
 		afm_submat = afm[ , glocs];
 		gsnps = afm_submat[2, ];
 		
-		# Initializing outer loop
+		# Initializing inner loop
 		last_snp = 0;
 		snp_list = integer(0);
 		final_AR2 = numeric(0);
@@ -179,18 +178,18 @@ msACME = function (
 		SST = afm_submat[7, 1];
 		SSEs = afm_submat[6, ];
 		adjR2 = 1 - (SSEs / SST) / ((n - p - length(snp_list) - 2) / (n - p - 1));
-		old_AR2 = 0
+		old_AR2 = -Inf
 		new_AR2 = max(adjR2);
 		
 		# Forward selection loop
-		while (new_AR2 >= old_AR2 && length(remainingSNPs) > n - p - 2) {
+		while (new_AR2 >= old_AR2 && length(snp_list) < n - p - 2) {
 			
 			next_snp = remainingSNPs[which.max(adjR2)];
 			snp_list = c(snp_list, next_snp);
 			final_AR2 = c(final_AR2, new_AR2);
 			remainingSNPs = setdiff(remainingSNPs, next_snp);
 			
-			if (verbose) message(paste0('----Added SNP ', next_snp,
+			if (verbose) message(paste0('----Gene ', count, ', added SNP ', next_snp,
 										' with AdjR2 ', round(max(adjR2), 4)));
 			
 			# Computing SSEs
@@ -218,16 +217,16 @@ msACME = function (
 		}
 			
 		# Computing final estimates and writing the results
-		SNPmat = SNPmat[-nrow(SNPmat), ];
+		SNPmat = subset(SNPmat, c(rep(T, nrow(SNPmat) - 1), F))
 		suppressWarnings(
-			{final_msacme_out = estimate_multiSNP(SNPmat, as.vector(expr), t(cvrt))}
+			{final_msacme_out = estimate_multiSNP(SNPmat / 1000, as.vector(expr), t(cvrt))}
 		);
 		real_snps = afm_submat[2, snp_list];
 		outmatrix = rbind(rep(cur_gene, length(real_snps)),
 						  real_snps,
 						  final_msacme_out$betahat / final_msacme_out$beta0hat,
 						  final_AR2);
-		fm = fm.open(acmefm);
+		fm = fm.open(paste0(acmefm, '_multiSNP'));
 		fm$appendColumns(outmatrix);
 		close(fm);
 		
