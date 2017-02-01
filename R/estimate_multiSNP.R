@@ -140,7 +140,7 @@ msACME = function (
 	{
 		if(verbose)	message('Creating output filematrix')
 		fm = fm.create(paste0(acmefm, '_multiSNP'), nrow = 4, ncol = 0);
-		rownames(fm) = c("geneid","snp_id","eta", "forward_adjR2")
+		rownames(fm) = c("geneid","snp_id","beta", "forward_adjR2")
 		close(fm)
 	}
 	
