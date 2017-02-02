@@ -11,9 +11,9 @@ correspond to a certain output set from that function.
 The input data must be stored in filematrices 
 (see \link[filematrix]{filematrix} package)
 and the results are also saved in a filematrix.
-This allows the function to perform estimation
-using multiple CPU cores in parallel
-without having to duplicate the data across all jobs.
+%This allows the function to perform estimation
+%using multiple CPU cores in parallel
+%without having to duplicate the data across all jobs.
 }
 \usage{
 msACME(
