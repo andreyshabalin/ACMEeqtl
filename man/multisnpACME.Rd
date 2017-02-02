@@ -1,19 +1,16 @@
-\name{msACME}
-\alias{msACME}
+\name{multisnpACME}
+\alias{multisnpACME}
 \title{
 	Estimation of Multi-SNP ACME Model for Full-Tissue Genome and All Local SNPs
 }
 \description{
-This function performs stepwise selection of a multi-SNP ACME model
-for all local SNPs, as given by the output of \code{\link{multithreadACME}}. 
-The arguments closely mirror those of \code{\link{multithreadACME}}, and must
-correspond to a certain output set from that function.
-The input data must be stored in filematrices 
-(see \link[filematrix]{filematrix} package)
-and the results are also saved in a filematrix.
-%This allows the function to perform estimation
-%using multiple CPU cores in parallel
-%without having to duplicate the data across all jobs.
+This function estimates gene-wise multi-SNP ACME models. It requires the output of
+\code{\link{multithreadACME}} to know all the local SNPs for each gene. It then
+performs forward step-wise selection of the local SNPs, based on the adjusted R-squared
+at each step. The arguments closely mirror those of \code{\link{multithreadACME}}; their values
+must correspond to a set of output files from that function (as well as the 
+input files which originally produced the output). It saves the data in filematrix
+format, similar to the output of \code{\link{multithreadACME}}.
 }
 \usage{
 msACME(
@@ -53,7 +50,7 @@ msACME(
 }
   \item{acmefm}{
     Name of the filematrix to in which the ACME estimates are stored.
-    A new file matrix with the name \code{paste0(acmefm, 'multiSNP_')} will be created to store the multi-SNP ACME estimates.
+    A new file matrix with the name \code{paste0(acmefm, '_multiSNP')} will be created to store the multi-SNP ACME estimates.
     If the filematrix exists, it will be overwritten.
 }
   \item{workdir}{
@@ -67,13 +64,13 @@ msACME(
 }
 }
 \value{
-  The function creates a filematrix named \code{paste0(acmefm, 'multiSNP_')} with 4 rows
+  The function creates a filematrix named \code{paste0(acmefm, '_multiSNP')} with 4 rows
   and a column for SNP when it is included in a mult-SNP model. If the SNP is included in more than one
   multi-SNP model, it will appear that many times. in the matrix. 
   The rows contain gene-SNP ids, step-wise adjusted R^2 statistics, and beta estimates:
     \item{geneid}{The gene id - the column number for the gene in the \code{genefm} filematrix.}
     \item{snp_id}{The SNP id - the column number for the SNP in the \code{snpsfm} filematrix.}
-	\item{eta}{The beta estimate in the full model (after all SNPs have been added).}
+	\item{beta}{The beta estimate in the full model (after all SNPs have been added).}
 	\item{forward_adjR2}{The step-wise adjusted R^2, computed for the full model when the SNP was added.}
 }
 \references{
