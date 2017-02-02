@@ -5,8 +5,8 @@
 }
 \description{
 This function performs stepwise selection of a multi-SNP ACME model
-for all local SNPs, as given by the output of \code{\link[ACMEeqtl]{estimate_multiSNP}}. 
-The arguments closely mirror those of \code{\link[ACMEeqtl]{estimate_multiSNP}}, and must
+for all local SNPs, as given by the output of \code{\link{multithreadACME}}. 
+The arguments closely mirror those of \code{\link{multithreadACME}}, and must
 correspond to a certain output set from that function.
 The input data must be stored in filematrices 
 (see \link[filematrix]{filematrix} package)
@@ -23,7 +23,7 @@ msACME(
 	slocfm = 'snps_loc',
 	cvrtfm = 'cvrt',
 	acmefm = 'ACME',
-	workdir = paste0(tempdirectory, "/filematrices"),
+	workdir = NULL,
 	genecap = Inf,
 	verbose = TRUE)
 }
@@ -131,7 +131,7 @@ close(fm);
 
 show(t(TenResults))
 
-Now we can estimate multi-SNP ACME models for each gene:
+# Now we can estimate multi-SNP ACME models for each gene:
 msACME(
 	genefm = 'gene',
 	snpsfm = 'snps',
