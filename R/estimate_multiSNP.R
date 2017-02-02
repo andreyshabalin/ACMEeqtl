@@ -49,7 +49,11 @@ estimate_multiSNP <- function (SNPs, expr, cvrt, method = "BFGS") {
 
 #-------------------------------------------------------------------------------
 
+<<<<<<< HEAD
 msACME = function (
+=======
+multisnpACME = function (
+>>>>>>> b4e8261bcc1c059479156fd8da249b4ed67b092a
 		genefm = 'gene',
 		snpsfm = 'snps',
 		glocfm = 'gene_loc',
@@ -94,7 +98,11 @@ msACME = function (
 		
 		n = nrow(cvrt);
 		p = ncol(cvrt);
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> b4e8261bcc1c059479156fd8da249b4ed67b092a
 	}
 	
 	### Create output matrix
