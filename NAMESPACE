@@ -3,7 +3,8 @@ export(
     "effectSizeEstimationC",
     "effectSizeEstimationR",
     "create_artificial_data",
-    "multithreadACME"
+    "multithreadACME",
+    "msACME"
 )
 importFrom( "filematrix", "fm.create", "fm.load", "fm.open",
             "fm.create.from.matrix", "closeAndDeleteFiles")
@@ -13,5 +14,5 @@ importMethodsFrom("filematrix", "close")
 importFrom( "parallel", "makeCluster", "clusterEvalQ", "clusterApplyLB",
 				"stopCluster", "detectCores", "clusterExport")
 
-importFrom("stats", "rbinom", "rnorm", "runif")
+importFrom("stats", "rbinom", "rnorm", "runif", "optim")
 importFrom("utils", "tail", "write.table")

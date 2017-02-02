@@ -155,6 +155,8 @@ close(fm);
 pander(t(TenResults))
 ```
 
+## Testing Multi-SNP Model for All Local Gene-SNP Pairs
+
 Now we can estimate multi-SNP ACME models for each gene:
 
 ```{r eqtl-multiSNP}
@@ -167,7 +169,7 @@ msACME(
 	acmefm = 'ACME',
 	workdir = paste0(tempdirectory, "/filematrices"),
 	genecap = Inf,
-	verbose = TRUE)
+	verbose = FALSE)
 
 ```
 
