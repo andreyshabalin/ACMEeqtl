@@ -93,7 +93,7 @@ if (FALSE) {
 
 #-------------------------------------------------------------------------------
 
-msACME = function (
+multisnpACME = function (
 		genefm = 'gene',
 		snpsfm = 'snps',
 		glocfm = 'gene_loc',
