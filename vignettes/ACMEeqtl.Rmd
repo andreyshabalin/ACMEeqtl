@@ -8,7 +8,7 @@ output:
     self_contained: true
 vignette: >
   %\VignetteIndexEntry{ACMEeqtl Overview}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::rmarkdown}	
 ---
 
 ```{r setup, include=FALSE}
@@ -17,11 +17,10 @@ vignette: >
 
 # Introduction
 
-We present a package for estimation of a new model called ACME
-which respects biological understanding of eQTLs.
+We present a package for estimation of cis-eQTL effect sizes, using a new model called ACME
+which respects biological understanding of cis-eQTL action.
 The model involves an additive effect of
-allele count and multiplicative component random noise.\
-The model is named "ACME" (Additive-Contribution, Multiplicative-Error) and is defined as
+allele count and multiplicative component random noise (hence "ACME": Additive-Contribution, Multiplicative-Error), and is defined as
 
 $$y_i = \log(\beta_0 + \beta_1 s_i) + Z_i^T \gamma + \epsilon_i$$
 
@@ -29,17 +28,16 @@ where
 
 * $y_i$ -- log-transformed normalized gene read count from sample $i$
 * $s_i$ -- minor allele count for the SNP of sample $i$
-* $Z_i$ -- Zi denote the $p \times 1$ vector of covarites for the sample $i$
+* $Z_i$ -- the $p \times 1$ vector of covarites for the sample $i$
 * $\beta_0$ -- unknown "baseline" mean of raw expression
 * $\beta_1$ -- unknown linear contribution of $s_i$ on the **raw** expression
 * $\gamma$ -- unknown $p \times 1$ covariate coefficient
 * $\epsilon_i$ -- noise
 
-We estimate the model using fast iterative algorithm.\
+We estimate the model using a fast iterative algorithm.\
 The algorithm estimates the model which is nonlinear only with respect to $\eta = \beta_1 / \beta_0$
 $$y_i = \log(1 + s_i \eta) + \log(\beta_0) + Z_i^T \gamma + \epsilon_i$$
 
-# Getting Started
 
 # Installation
 
@@ -66,7 +64,7 @@ library(ACMEeqtl)
 
 ## Testing a Single Gene-SNP Pair
 
-First we generate sample gene, SNP, and set of covariates.
+First we generate sample gene expression, SNP allele counts, and a set of covariates.
 
 ```{r singleInit}
 # Model parameters
@@ -115,6 +113,7 @@ First we generate a eQTL dataset in filematrix format
 
 ```{r eqtlInit}
 tempdirectory = tempdir();
+#tempdirectory = "~/Desktop/package_tests"
 z = create_artificial_data(
     nsample = 100,
     ngene = 500,
@@ -160,7 +159,7 @@ pander(t(TenResults))
 Now we can estimate multi-SNP ACME models for each gene:
 
 ```{r eqtl-multiSNP}
-msACME(
+multisnpACME(
 	genefm = 'gene',
 	snpsfm = 'snps',
 	glocfm = 'gene_loc',
