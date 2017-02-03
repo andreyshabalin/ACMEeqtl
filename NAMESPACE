@@ -4,7 +4,7 @@ export(
     "effectSizeEstimationR",
     "create_artificial_data",
     "multithreadACME",
-    "msACME"
+    "multisnpACME"
 )
 importFrom( "filematrix", "fm.create", "fm.load", "fm.open",
             "fm.create.from.matrix", "closeAndDeleteFiles")

@@ -6,14 +6,16 @@
 \description{
 This function estimates gene-wise multi-SNP ACME models. It requires the output of
 \code{\link{multithreadACME}} to know all the local SNPs for each gene. It then
-performs forward step-wise selection of the local SNPs, based on the adjusted R-squared
+performs forward step-wise selection of the local SNPs, based on the adjusted-R-squared
 at each step. The arguments closely mirror those of \code{\link{multithreadACME}}; their values
 must correspond to a set of output files from that function (as well as the 
 input files which originally produced the output). It saves the data in filematrix
 format, similar to the output of \code{\link{multithreadACME}}.
+
+Note that each multi-SNP model will contain at least one SNP, even if that initial SNP was not significant under the single-SNP models. This initial SNP will be the one with the highest adjusted-R-squared value among the single-SNP models. However, after the initial SNP, further SNPs are added only if the combined model's adjusted-R-squared is greater than that from the previous combined model.
 }
 \usage{
-msACME(
+multisnpACME(
 	genefm = 'gene',
 	snpsfm = 'snps',
 	glocfm = 'gene_loc',
@@ -65,19 +67,21 @@ msACME(
 }
 \value{
   The function creates a filematrix named \code{paste0(acmefm, '_multiSNP')} with 4 rows
-  and a column for SNP when it is included in a mult-SNP model. If the SNP is included in more than one
-  multi-SNP model, it will appear that many times. in the matrix. 
-  The rows contain gene-SNP ids, step-wise adjusted R^2 statistics, and beta estimates:
+  and a column for a SNP when it is included in a mult-SNP model. If the SNP is included in more than one
+  multi-SNP model, it will appear multiple times in the matrix (but with different beta estimates, corresponding to the 
+  paritular models). 
+  The rows contain gene-SNP ids, step-wise adjusted-R-squared statistics, and beta estimates:
     \item{geneid}{The gene id - the column number for the gene in the \code{genefm} filematrix.}
     \item{snp_id}{The SNP id - the column number for the SNP in the \code{snpsfm} filematrix.}
-	\item{beta}{The beta estimate in the full model (after all SNPs have been added).}
-	\item{forward_adjR2}{The step-wise adjusted R^2, computed for the full model when the SNP was added.}
+    \item{beta0}{The beta0 estimate in the full model.}
+	\item{beta}{The beta estimate for the SNP in the full model (after all chosen SNPs have been added).}
+	\item{forward_adjR2}{The step-wise adjusted-R-squared, computed for the full model when the SNP was added.}
 }
 \references{
 	The manuscript is available at: \url{http://arxiv.org/abs/1605.08799}
 }
 \author{
-	Andrey A Shabalin \email{ashabalin@vcu.edu}
+	Andrey A Shabalin \email{ashabalin@vcu.edu}, John Palowitch
 }
 \note{
   The rows of \code{genefm}, \code{snpsfm}, and \code{cvrtfm} filematrices must match.
@@ -129,7 +133,7 @@ close(fm);
 show(t(TenResults))
 
 # Now we can estimate multi-SNP ACME models for each gene:
-msACME(
+multisnpACME(
 	genefm = 'gene',
 	snpsfm = 'snps',
 	glocfm = 'gene_loc',

@@ -7,6 +7,11 @@ estimate_multiSNP <- function (SNPs, expr, cvrt, method = "BFGS") {
   n = length(expr)
   X = rbind(rep(1, n), SNPs)
   
+  if (max(SNPs) > 2)
+  	SNPs = SNPs / 1000;
+  if (max(SNPs) > 2 || min(SNPs) < 0)
+  	stop("SNP data ill-formatted: condition max(SNPs) > 2 || min(SNPs) < 0 is TRUE");
+  
   # RSS function
   loglik = function(BetaGam) {
     Beta = BetaGam[1:(nsnp + 1)];
@@ -49,11 +54,7 @@ estimate_multiSNP <- function (SNPs, expr, cvrt, method = "BFGS") {
 
 #-------------------------------------------------------------------------------
 
-<<<<<<< HEAD
-msACME = function (
-=======
 multisnpACME = function (
->>>>>>> b4e8261bcc1c059479156fd8da249b4ed67b092a
 		genefm = 'gene',
 		snpsfm = 'snps',
 		glocfm = 'gene_loc',
@@ -98,18 +99,14 @@ multisnpACME = function (
 		
 		n = nrow(cvrt);
 		p = ncol(cvrt);
-<<<<<<< HEAD
-		
-=======
 
->>>>>>> b4e8261bcc1c059479156fd8da249b4ed67b092a
 	}
 	
 	### Create output matrix
 	{
 		if(verbose)	message('Creating output filematrix')
-		fm = fm.create(paste0(acmefm, '_multiSNP'), nrow = 4, ncol = 0);
-		rownames(fm) = c("geneid","snp_id","beta", "forward_adjR2")
+		fm = fm.create(paste0(acmefm, '_multiSNP'), nrow = 5, ncol = 0);
+		rownames(fm) = c("geneid","snp_id","beta0","betas", "forward_adjR2")
 		close(fm)
 	}
 	
@@ -151,7 +148,7 @@ multisnpACME = function (
 		new_AR2 = max(adjR2);
 		
 		# Forward selection loop
-		while (new_AR2 >= old_AR2 && length(snp_list) < n - p - 2) {
+		while (new_AR2 > old_AR2 && length(snp_list) < n - p - 2 && length(remainingSNPs) > 1) {
 			
 			next_snp = remainingSNPs[which.max(adjR2)];
 			snp_list = c(snp_list, next_snp);
@@ -171,7 +168,7 @@ multisnpACME = function (
 				SNPmat[nrow(SNPmat) , ] = 
 					as.vector(sfm[ , afm_submat[2, remainingSNPs[rsi]]]);
 				suppressWarnings(
-					{msacme_out = estimate_multiSNP(SNPmat / 1000, as.vector(expr), t(cvrt_qr))}
+					{msacme_out = estimate_multiSNP(SNPmat, as.vector(expr), t(cvrt_qr))}
 				);
 				
 				SSEs[rsi] = msacme_out$DF * msacme_out$sigmahat;
@@ -184,16 +181,27 @@ multisnpACME = function (
 			new_AR2 = max(adjR2);
 			
 		}
+		
+		if (length(remainingSNPs) == 1) { # Decide whether or not to add the last SNP
+			if (new_AR2 <= old_AR2) {
+				SNPmat = subset(SNPmat, c(rep(T, nrow(SNPmat) - 1), F));
+			} else {
+				snp_list = c(snp_list, next_snp);
+				final_AR2 = c(final_AR2, new_AR2);
+			}
+		} else {
+			SNPmat = subset(SNPmat, c(rep(T, nrow(SNPmat) - 1), F))
+		}
 			
 		# Computing final estimates and writing the results
-		SNPmat = subset(SNPmat, c(rep(T, nrow(SNPmat) - 1), F))
 		suppressWarnings(
-			{final_msacme_out = estimate_multiSNP(SNPmat / 1000, as.vector(expr), t(cvrt))}
+			{final_msacme_out = estimate_multiSNP(SNPmat, as.vector(expr), t(cvrt))}
 		);
 		real_snps = afm_submat[2, snp_list];
 		outmatrix = rbind(rep(cur_gene, length(real_snps)),
 						  real_snps,
-						  final_msacme_out$betahat / final_msacme_out$beta0hat,
+						  rep(final_msacme_out$beta0hat, length(real_snps)),
+						  final_msacme_out$betahat,
 						  final_AR2);
 		fm = fm.open(paste0(acmefm, '_multiSNP'));
 		fm$appendColumns(outmatrix);
