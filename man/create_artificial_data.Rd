@@ -5,7 +5,6 @@
 }
 \description{
     Create artificial genotype, gene expression, covariate, and gene/SNP location data sets.
-    Can record them in 
 }
 \usage{
 create_artificial_data(
