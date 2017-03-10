@@ -89,7 +89,7 @@ multithreadACME(
 	The manuscript is available at: \url{http://arxiv.org/abs/1605.08799}
 }
 \author{
-	Andrey A Shabalin \email{ashabalin@vcu.edu}, John Palowitch
+	Andrey A Shabalin \email{andrey.shabalin@gmail.com}, John Palowitch
 }
 \note{
   The rows of \code{genefm}, \code{snpsfm}, and \code{cvrtfm} filematrices must match.

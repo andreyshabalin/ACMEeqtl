@@ -38,7 +38,7 @@ effectSizeEstimationR(x, y, cvrt)
 	\item{SE_eta}{Standard error of the eta estimate.}
 }
 \author{
-	Andrey A Shabalin \email{ashabalin@vcu.edu}, John Palowitch
+	Andrey A Shabalin \email{andrey.shabalin@gmail.com}, John Palowitch
 }
 \references{
 	The manuscript is available at: \url{http://arxiv.org/abs/1605.08799}
