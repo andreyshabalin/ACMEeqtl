@@ -109,7 +109,7 @@ Variables `z1`, `z2` show that the estimation was done in `r z1[3]` iterations, 
 ## Testing All Local Gene-SNP Pairs
 
 First we generate a eQTL dataset in filematrix format 
-(see [filematrix](https://cran.r-project.org/web/packages/filematrix/index.html) package).
+(see [filematrix](https://CRAN.R-project.org/package=filematrix) package).
 
 ```{r eqtlInit}
 tempdirectory = tempdir();

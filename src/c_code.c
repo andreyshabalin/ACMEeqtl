@@ -1,8 +1,8 @@
 #include <R.h>
 #include <Rinternals.h>
+#include <R_ext/Rdynload.h>
 #include <math.h>
 #include <stdbool.h>
-#include <R_ext/Rdynload.h>
 
 // Add use of R_CheckUserInterrupt
 
@@ -380,4 +380,5 @@ static R_CallMethodDef callMethods[] = {
 
 void R_init_ACMEeqtl(DllInfo *info)	{
 	R_registerRoutines(info, NULL, callMethods, NULL, NULL);
+	R_useDynamicSymbols(info, TRUE);
 }

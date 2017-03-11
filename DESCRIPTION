@@ -2,20 +2,20 @@ Package: ACMEeqtl
 Type: Package
 Title: Estimation of Interpretable eQTL Effect Sizes Using a Log of Linear Model
 Version: 1.4
-Date: 2017-03-10
+Date: 2017-03-11
 Author: Andrey A Shabalin, John Palowitch
 Maintainer: Andrey A Shabalin <andrey.shabalin@gmail.com>
 Description: We use a non-linear model, termed ACME, 
     that reflects a parsimonious biological model for 
     allelic contributions of cis-acting eQTLs.
     With non-linear least-squares algorithm we 
-    estimate maximum likelihood paramters. The ACME model
+    estimate maximum likelihood parameters. The ACME model
     provides interpretable effect size estimates and
     p-values with well controlled Type-I error.
     Includes both R and (much faster) C implementations.
 BugReports: https://github.com/andreyshabalin/ACMEeqtl/issues
 Depends: R (>= 3.3.0), filematrix
-Requires: parallel
+Imports: parallel
 Suggests: knitr, rmarkdown, BiocStyle, pander 
 URL: https://github.com/andreyshabalin/ACMEeqtl
 License: LGPL-3
