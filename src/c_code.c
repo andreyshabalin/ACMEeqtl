@@ -166,6 +166,7 @@ void internalEstimate(double *xx, double *yy, double *cc,
 			ydiff[i] = yy[i] - log1p(beta_cur * xx[i]); // ydiff[i] = yy[i] - log(fit[i]);
 		}
 		
+		// Residualize the fit
 		orthogonolizeVector(ydiff, cc, ycvrt, ydiff, n, ncvrt);
 		
 		if(isdebug) Rprintf("ydiff tail: %f\n", ydiff[n-1]);
@@ -199,18 +200,18 @@ void internalEstimate(double *xx, double *yy, double *cc,
 		double *xfit = fit;
 		for( int i=0; i<n; i++)
 			xfit[i] = xx[i] / fit[i];
-		double ff = sumsq(xfit, n);			// FF <- crossprod(x / fit)
+		double ff = sumsq(xfit, n);			// FF = crossprod(x / fit)
 		double xfyadj = sumxy(xfit, ydiff, n);	// xfyadj = crossprod(x / fit, ydiff_adj)
 		
 		if(isdebug) Rprintf("xfit tail: %f\n", xfit[54-1]);
 		if(isdebug) Rprintf("ff: %f\n", ff);
 		if(isdebug) Rprintf("xfyadj: %f\n", xfyadj);
 		
-		// ycvrt = crossprod(cvrtqr, x / fit)
+		// ycvrt = CF = crossprod(cvrtqr, x / fit)
 		vecmatProduct(xfit, cc, ycvrt, n, ncvrt);
 		if(isdebug) Rprintf("ycvrt tail: %f\n", ycvrt[ncvrt-1]);
 		
-		// XtX_inv_sub <- 1 / (FF - crossprod(CF))
+		// XtX_inv_sub = 1 / (FF - crossprod(CF))
 		double XtX_inv_sub = 1 / (ff - sumsq(ycvrt, ncvrt));
 		if(isdebug) Rprintf("XtX_inv_sub: %f\n", XtX_inv_sub);
 		
