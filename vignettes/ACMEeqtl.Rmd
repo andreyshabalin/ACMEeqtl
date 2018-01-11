@@ -1,16 +1,16 @@
 ---
 title: "Interpretable eQTL Effect Sizes Using a Log of Linear Model"
 author: "Andrey A. Shabalin, John Palowitch"
-date: "January 28, 2017"
-output:   
-  BiocStyle::html_document:
-    toc: true # table of content true
-    self_contained: true
+date: "`r Sys.Date()`"
+output:
+    BiocStyle::html_document:
+        toc: true # table of content true
+        self_contained: true
 vignette: >
   %\VignetteIndexEntry{ACMEeqtl Overview Vignette}
   %\VignetteEngine{knitr::rmarkdown}	
 bibliography: bib.bib
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
@@ -20,12 +20,12 @@ editor_options:
 
 # Introduction
 
-We present a package for estimation of cis-eQTL effect sizes, 
+We present a package for estimation of cis-eQTL effect sizes,
 using a new model called ACME
 which respects biological understanding of cis-eQTL action.
 The model, fully presented and validated in [@palowitch2017estimation],
 involves an additive effect of
-allele count and multiplicative component random noise 
+allele count and multiplicative component random noise
 (hence "ACME": Additive-Contribution, Multiplicative-Error), and is defined as
 
 $$y_i = \log(\beta_0 + \beta_1 s_i) + Z_i^T \gamma + \epsilon_i$$
