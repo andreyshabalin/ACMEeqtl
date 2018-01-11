@@ -7,8 +7,11 @@ output:
     toc: true # table of content true
     self_contained: true
 vignette: >
-  %\VignetteIndexEntry{ACMEeqtl Overview}
+  %\VignetteIndexEntry{ACMEeqtl Overview Vignette}
   %\VignetteEngine{knitr::rmarkdown}	
+bibliography: bib.bib
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -17,10 +20,13 @@ vignette: >
 
 # Introduction
 
-We present a package for estimation of cis-eQTL effect sizes, using a new model called ACME
+We present a package for estimation of cis-eQTL effect sizes, 
+using a new model called ACME
 which respects biological understanding of cis-eQTL action.
-The model involves an additive effect of
-allele count and multiplicative component random noise (hence "ACME": Additive-Contribution, Multiplicative-Error), and is defined as
+The model, fully presented and validated in [@palowitch2017estimation],
+involves an additive effect of
+allele count and multiplicative component random noise 
+(hence "ACME": Additive-Contribution, Multiplicative-Error), and is defined as
 
 $$y_i = \log(\beta_0 + \beta_1 s_i) + Z_i^T \gamma + \epsilon_i$$
 
@@ -35,7 +41,9 @@ where
 * $\epsilon_i$ -- noise
 
 We estimate the model using a fast iterative algorithm.\
-The algorithm estimates the model which is nonlinear only with respect to $\eta = \beta_1 / \beta_0$
+The algorithm estimates the model which is nonlinear only with respect to 
+$\eta = \beta_1 / \beta_0$
+
 $$y_i = \log(1 + s_i \eta) + \log(\beta_0) + Z_i^T \gamma + \epsilon_i$$
 
 
@@ -44,7 +52,7 @@ $$y_i = \log(1 + s_i \eta) + \log(\beta_0) + Z_i^T \gamma + \epsilon_i$$
 ACMEeqtl can be installed with the following command.
 
 ```{r install, eval=FALSE}
-install.packages('ACMEeqtl')
+install.packages("ACMEeqtl")
 ```
 
 # Using the Package
@@ -112,12 +120,11 @@ First we generate a eQTL dataset in filematrix format
 (see [filematrix](https://CRAN.R-project.org/package=filematrix) package).
 
 ```{r eqtlInit}
-tempdirectory = tempdir();
-#tempdirectory = "~/Desktop/package_tests"
+tempdirectory = tempdir()
 z = create_artificial_data(
     nsample = 100,
-    ngene = 500,
-    nsnp = 5000,
+    ngene = 100,
+    nsnp = 501,
     ncvrt = 1,
     minMAF = 0.2,
     saveDir = tempdirectory,
@@ -127,7 +134,8 @@ z = create_artificial_data(
     verbose = FALSE)
 ```
 
-In this example, we use 2 CPU cores (threads) for testing of all gene-SNP pairs within 100,000 bp.
+In this example, we use 2 CPU cores (threads) for testing of 
+all gene-SNP pairs within 100,000 bp.
 
 ```{r eqtlEstim}
 multithreadACME(
@@ -137,19 +145,19 @@ multithreadACME(
     slocfm = "snps_loc",
     cvrtfm = "cvrt",
     acmefm = "ACME",
-    cisdist = 100e+03, 
+    cisdist = 1.5e+06,
     threads = 2,
-    workdir = paste0(tempdirectory,"/filematrices"),
+    workdir = file.path(tempdirectory, "filematrices"),
     verbose = FALSE)
 ```
 
 Now the filematrix `ACME` holds estimations for all local gene-SNP pairs.
 
 ```{r eqtlLool}
-fm = fm.open(paste0(tempdirectory,"/filematrices/ACME"))
-TenResults = fm[,1:10];
-rownames(TenResults) = rownames(fm);
-close(fm);
+fm = fm.open(file.path(tempdirectory, "filematrices", "ACME"))
+TenResults = fm[,1:10]
+rownames(TenResults) = rownames(fm)
+close(fm)
 
 pander(t(TenResults))
 ```
@@ -160,27 +168,33 @@ Now we can estimate multi-SNP ACME models for each gene:
 
 ```{r eqtl-multiSNP}
 multisnpACME(
-	genefm = 'gene',
-	snpsfm = 'snps',
-	glocfm = 'gene_loc',
-	slocfm = 'snps_loc',
-	cvrtfm = 'cvrt',
-	acmefm = 'ACME',
-	workdir = paste0(tempdirectory, "/filematrices"),
+	genefm = "gene",
+	snpsfm = "snps",
+	glocfm = "gene_loc",
+	slocfm = "snps_loc",
+	cvrtfm = "cvrt",
+	acmefm = "ACME",
+	workdir = file.path(tempdirectory, "filematrices"),
 	genecap = Inf,
 	verbose = FALSE)
-
 ```
 
 Now the filematrix `ACME_multiSNP` holds estimations for all multi-SNP models. 
 ```{r eqtlLool2}
-fm = fm.open(paste0(tempdirectory,"/filematrices/ACME_multiSNP"))
-TenResults = fm[,1:10];
-rownames(TenResults) = rownames(fm);
-close(fm);
+fm = fm.open(file.path(tempdirectory, "filematrices", "ACME_multiSNP"))
+TenResults = fm[,1:10]
+rownames(TenResults) = rownames(fm)
+close(fm)
 
 pander(t(TenResults))
 ```
 
 
-Note that each multi-SNP model will contain at least one SNP, even if that initial SNP was not significant under the single-SNP models. This initial SNP will be the one with the highest adjusted-R$^2$ value among the single-SNP models. However, after the initial SNP, further SNPs are added only if the combined model's adjusted-R$^2$ is greater than that from the previous combined model.
+Note that each multi-SNP model will contain at least one SNP,
+even if that initial SNP was not significant under the single-SNP models.
+This initial SNP will be the one with the highest adjusted-R$^2$ value 
+among the single-SNP models. However, after the initial SNP,
+further SNPs are added only if the combined model's adjusted-R$^2$ is
+greater than that from the previous combined model.
+
+# References

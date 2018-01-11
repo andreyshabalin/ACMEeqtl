@@ -1,11 +1,16 @@
 citHeader("To cite the 'ACMEeqtl' package in publications use:")
 
 citEntry(entry="article",
-         title = "Estimation of Interpretable eQTL Effect Sizes Using a Log of Linear Model",
-         author = personList(as.person("J. Palowitch"),as.person("A.A. Shabalin"),as.person("Y. Zhou"),as.person("A.B. Nobel"),as.person("F.A. Wright")),
-         year     = "2016",
-         url      = "http://arxiv.org/abs/1605.08799",
-         publisher= "arxig.org",
-         journal  = "arxig.org",
-         textVersion = "John Palowitch, Andrey Shabalin, Yihui Zhou, Andrew B. Nobel, Fred A. Wright. Estimation of Interpretable eQTL Effect Sizes Using a Log of Linear Model, http://arxiv.org/abs/1605.08799"
+         title = "Estimation of Interpretable {eQTL} Effect Sizes Using a Log of Linear Model",
+         author = personList(
+                    person("John", "Palowitch"),
+                    person("Andrey A", "Shabalin"),
+                    person("Yi-Hui", "Zhou"),
+                    person("Andrew B", "Nobel"),
+                    person("Fred A", "Wright")),
+         year     = "2017",
+         url      = "http://onlinelibrary.wiley.com/doi/10.1111/biom.12810/full",
+         publisher= "Wiley Online Library",
+         journal  = "Biometrics",
+         textVersion = "John Palowitch, Andrey Shabalin, Yihui Zhou, Andrew B. Nobel, Fred A. Wright. Estimation of Interpretable eQTL Effect Sizes Using a Log of Linear Model, Biometrics 2017, http://onlinelibrary.wiley.com/doi/10.1111/biom.12810/full"
 )
