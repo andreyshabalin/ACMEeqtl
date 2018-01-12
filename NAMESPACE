@@ -6,6 +6,7 @@ export(
     "multithreadACME",
     "multisnpACME"
 )
+
 importFrom("filematrix",
                 "fm.create", "fm.load", "fm.open",
                 "fm.create.from.matrix", "closeAndDeleteFiles")
@@ -16,5 +17,6 @@ importFrom("parallel",
                 "makeCluster", "clusterEvalQ", "clusterApplyLB",
                 "stopCluster", "detectCores", "clusterExport")
 
-importFrom("stats", "rbinom", "rnorm", "runif", "optim")
+importFrom("stats", 
+                "rbinom", "rnorm", "runif", "optim")
 importFrom("utils", "tail", "write.table")
