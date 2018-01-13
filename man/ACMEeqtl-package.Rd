@@ -5,14 +5,14 @@
     Estimation of Interpretable eQTL Effect Sizes Using a Log of Linear Model
 }
 \description{
-We use a non-linear model, termed ACME, 
-that reflects a parsimonious biological model for 
-allelic contributions of cis-acting eQTLs.
-With non-linear least-squares algorithm we 
-estimate maximum likelihood paramters. The ACME model
-provides interpretable effect size estimates and
-p-values with well controlled Type-I error.    
-Includes both R and (faster) C implementations.
+    We use a non-linear model, termed ACME, 
+    that reflects a parsimonious biological model for 
+    allelic contributions of cis-acting eQTLs.
+    With non-linear least-squares algorithm we 
+    estimate maximum likelihood paramters. The ACME model
+    provides interpretable effect size estimates and
+    p-values with well controlled Type-I error.    
+    Includes both R and (faster) C implementations.
 }
 \details{
     \tabular{ll}{

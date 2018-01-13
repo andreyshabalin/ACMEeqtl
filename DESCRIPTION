@@ -2,7 +2,7 @@ Package: ACMEeqtl
 Type: Package
 Title: Estimation of Interpretable eQTL Effect Sizes Using a Log of Linear Model
 Version: 1.5
-Date: 2017-03-11
+Date: 2018-01-11
 Author: Andrey A Shabalin, John Palowitch
 Maintainer: Andrey A Shabalin <andrey.shabalin@gmail.com>
 Description: We use a non-linear model, termed ACME, 
