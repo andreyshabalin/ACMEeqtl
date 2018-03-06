@@ -137,7 +137,7 @@ multithreadACME(
 # First we generate a eQTL dataset in filematrix format 
 tempdirectory = tempdir()
 z = create_artificial_data(
-    nsample = 100,
+    nsample = 50,
     ngene = 11,
     nsnp = 51,
     ncvrt = 1,
@@ -158,7 +158,7 @@ multithreadACME(
     cvrtfm = "cvrt",
     acmefm = "ACME",
     cisdist = 10e+06,
-    threads = 2,
+    threads = 1, # Use more for faster run
     workdir = file.path(tempdirectory, "filematrices"),
     verbose = FALSE)
 
