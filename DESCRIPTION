@@ -1,8 +1,8 @@
 Package: ACMEeqtl
 Type: Package
 Title: Estimation of Interpretable eQTL Effect Sizes Using a Log of Linear Model
-Version: 1.6
-Date: 2018-03-06
+Version: 1.7
+Date: 2018-05-08
 Authors@R: c(person("Andrey A", "Shabalin",
                     role = c("aut", "cre"),
                     email = "andrey.shabalin@gmail.com",

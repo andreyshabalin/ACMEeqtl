@@ -71,11 +71,13 @@ multithreadACME = function(
         gene_loc = fm.load(file.path(workdir, glocfm));
         snps_loc = fm.load(file.path(workdir, slocfm));
         stopifnot( !is.unsorted(snps_loc) );
+        stopifnot( all(gene_loc[,1] <= gene_loc[,2]) );
     } # gene_loc, snps_loc
 
     ### Get matrix sizes
     {
-        if(verbose)    message("Checking gene/SNP filematrices");
+        if(verbose)
+            message("Checking gene/SNP filematrices");
         gfm = fm.open(file.path(workdir, genefm), readonly = TRUE);
         sfm = fm.open(file.path(workdir, snpsfm), readonly = TRUE);
         
@@ -86,18 +88,19 @@ multithreadACME = function(
         
         close(gfm);
         close(sfm);
-    }
-        
+    } # gfm, sfm
+    
     ### Count number of SNPs for each gene
     {
-        ind1 = findInterval(gene_loc, snps_loc + cisdist + 1) + 1L;
-        ind2 = findInterval(gene_loc, snps_loc - cisdist);
+        ind1 = findInterval(gene_loc[,1], snps_loc + cisdist + 1) + 1L;
+        ind2 = findInterval(gene_loc[,2], snps_loc - cisdist);
         # total_pairs = sum(ind2-ind1+1);
         cum_pairs = c(0, cumsum(ind2-ind1+1));
         total_pairs = tail(cum_pairs, 1);
         if(verbose)
             message("Total ", total_pairs, " local gene-SNP pairs");
     } # ind1, ind2, total_pairs, cum_pairs
+    # ind1 .. ind2 -- first and last SNP id for all gene c(starts, ends).
     
     # genes_without_snps = ind2<ind1;
     
@@ -160,7 +163,7 @@ multithreadACME = function(
     }
     
     paramlist = vector("list", length(ord));
-    for( j in seq_along(ord) ){ # i=1
+    for( j in seq_along(ord) ){ # j=4
         i = ord[j];
         geneset = gene_block_starts[i]:(gene_block_starts[i+1]-1L);
         paramlist[[j]] = list(
